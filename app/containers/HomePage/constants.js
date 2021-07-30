@@ -10,3 +10,6 @@
  */
 
 export const CHANGE_USERNAME = 'boilerplate/Home/CHANGE_USERNAME';
+export const GET_LIST_LEAGUES = 'boilerplate/Home/GET_LIST_LEAGUES';
+export const GET_LIST_LEAGUES_SUCCESS =
+  'boilerplate/Home/GET_LIST_LEAGUES_SUCCESS';

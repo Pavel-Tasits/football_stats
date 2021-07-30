@@ -13,4 +13,10 @@ const makeSelectUsername = () =>
     homeState => homeState.username,
   );
 
-export { selectHome, makeSelectUsername };
+const selectEuroCompetitions = () =>
+  createSelector(
+    selectHome,
+    homeState => homeState.listLeagues,
+  );
+
+export { selectHome, makeSelectUsername, selectEuroCompetitions };

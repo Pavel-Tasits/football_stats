@@ -15,7 +15,11 @@
  *    }
  */
 
-import { CHANGE_USERNAME } from './constants';
+import {
+  CHANGE_USERNAME,
+  GET_LIST_LEAGUES,
+  GET_LIST_LEAGUES_SUCCESS,
+} from './constants';
 
 /**
  * Changes the input field of the form
@@ -28,5 +32,18 @@ export function changeUsername(username) {
   return {
     type: CHANGE_USERNAME,
     username,
+  };
+}
+
+export function getListLeagues() {
+  return {
+    type: GET_LIST_LEAGUES,
+  };
+}
+
+export function getListLeaguesSuccess(list) {
+  return {
+    type: GET_LIST_LEAGUES_SUCCESS,
+    list,
   };
 }
