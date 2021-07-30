@@ -1,6 +1,6 @@
 /**
  *
- * Tests for Competition
+ * Tests for CompetitionItem
  *
  * @see https://github.com/react-boilerplate/react-boilerplate/tree/master/docs/testing
  *
@@ -12,7 +12,7 @@ import { render } from 'react-testing-library';
 
 import Competition from '../index';
 
-describe('<Competition />', () => {
+describe('<CompetitionItem />', () => {
   it('Expect to not log errors in console', () => {
     const spy = jest.spyOn(global.console, 'error');
     render(<Competition />);
