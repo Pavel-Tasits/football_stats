@@ -7,6 +7,9 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { withRouter } from 'react-router-dom';
 import { setTeamsList } from '../../containers/HomePage/actions';
 
 const useStyles = makeStyles(theme => ({
@@ -30,13 +33,12 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function CompetitionItem({ competition, handleGetTeamsList }) {
+function CompetitionItem({ competition, handleGetTeamsList, history }) {
   const classes = useStyles();
 
   const handlePickCompetition = id => {
-    // event.preventDefault();
     handleGetTeamsList(id);
-    console.log('did it', id);
+    history.push('/teams_list');
   };
 
   return (
@@ -84,6 +86,7 @@ function CompetitionItem({ competition, handleGetTeamsList }) {
 CompetitionItem.propTypes = {
   competition: PropTypes.object.isRequired,
   handleGetTeamsList: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired,
 };
 
 export function mapDispatchToProps(dispatch) {
@@ -92,4 +95,13 @@ export function mapDispatchToProps(dispatch) {
   };
 }
 
-export default memo(CompetitionItem);
+const withConnect = connect(
+  null,
+  mapDispatchToProps,
+);
+
+export default compose(
+  withRouter,
+  withConnect,
+  memo,
+)(CompetitionItem);

@@ -5,11 +5,12 @@ import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import { selectTeamsList } from '../HomePage/selectors';
 import { setListLeagues } from '../HomePage/actions';
+import TeamList from '../../components/TeamList/Loadable';
 
 export function TeamsListPage({ teamsList }) {
   console.log('teamsList', teamsList);
 
-  return <div>hallo</div>;
+  return <TeamList teamsList={teamsList} />;
 }
 
 TeamsListPage.propTypes = {
