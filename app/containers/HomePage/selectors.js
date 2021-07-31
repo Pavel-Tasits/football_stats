@@ -13,4 +13,10 @@ const selectEuroCompetitions = () =>
     homeState => homeState.listLeagues,
   );
 
-export { selectHome, selectEuroCompetitions };
+const selectTeamsList = () =>
+  createSelector(
+    selectHome,
+    homeState => homeState.teamsList,
+  );
+
+export { selectHome, selectEuroCompetitions, selectTeamsList };

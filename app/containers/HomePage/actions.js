@@ -1,4 +1,4 @@
-import { GET_LIST_LEAGUES, GET_LIST_LEAGUES_SUCCESS } from './constants';
+import { GET_LIST_LEAGUES, GET_TEAMS_LIST } from './constants';
 
 export function setListLeagues() {
   return {
@@ -6,9 +6,9 @@ export function setListLeagues() {
   };
 }
 
-export function getListLeaguesSuccess(list) {
+export function setTeamsList(id) {
   return {
-    type: GET_LIST_LEAGUES_SUCCESS,
-    list,
+    type: GET_TEAMS_LIST,
+    id,
   };
 }
