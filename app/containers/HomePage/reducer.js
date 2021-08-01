@@ -4,12 +4,16 @@ import {
   GET_LIST_LEAGUES_SUCCESS,
   GET_TEAMS_LIST,
   GET_TEAMS_LIST_SUCCESS,
+  TEAM_ID,
+  TEAM_MATCHES,
 } from './constants';
 
 // The initial state of the App
 export const initialState = {
   listLeagues: '',
   teamsList: '',
+  teamId: '',
+  teamMatches: '',
   loading: false,
 };
 
@@ -25,11 +29,17 @@ const homeReducer = (state = initialState, action) =>
         draft.teamsList = action.teamsList;
         draft.loading = false;
         break;
+      case TEAM_ID:
+        draft.teamId = action.teamId;
+        break;
       case GET_LIST_LEAGUES:
         draft.loading = true;
         break;
       case GET_TEAMS_LIST:
         draft.loading = true;
+        break;
+      case TEAM_MATCHES:
+        draft.teamMatches = action.teamMatches;
         break;
     }
   });

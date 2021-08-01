@@ -10,7 +10,7 @@ import Button from '@material-ui/core/Button';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { withRouter } from 'react-router-dom';
-import { setTeamsList } from '../../containers/HomePage/actions';
+import { setTeamsList, setTeamId } from '../../containers/HomePage/actions';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -33,12 +33,18 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function CompetitionItem({ competition, handleGetTeamsList, history }) {
+function CompetitionItem({
+  competition,
+  handleGetTeamsList,
+  history,
+  handleSetTeamId,
+}) {
   const classes = useStyles();
 
   const handlePickCompetition = id => {
+    handleSetTeamId(id);
     handleGetTeamsList(id);
-    history.push('/teams_list');
+    history.push(`/teams_list?team=${id}`);
   };
 
   return (
@@ -86,12 +92,14 @@ function CompetitionItem({ competition, handleGetTeamsList, history }) {
 CompetitionItem.propTypes = {
   competition: PropTypes.object.isRequired,
   handleGetTeamsList: PropTypes.func.isRequired,
+  handleSetTeamId: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
 };
 
 export function mapDispatchToProps(dispatch) {
   return {
     handleGetTeamsList: id => dispatch(setTeamsList(id)),
+    handleSetTeamId: id => dispatch(setTeamId(id)),
   };
 }
 

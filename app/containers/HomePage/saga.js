@@ -1,10 +1,12 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
-import { API_TOKEN } from '../../utils/constants';
+import { API_TOKEN, COMPETITIONS_URL } from '../../utils/constants';
 import {
   GET_LIST_LEAGUES,
   GET_LIST_LEAGUES_SUCCESS,
   GET_TEAMS_LIST,
   GET_TEAMS_LIST_SUCCESS,
+  TEAM_MATCHES,
+  TEAM_MATCHES_WATCHER,
 } from './constants';
 
 function* apiFetch(url, method = 'GET') {
@@ -12,10 +14,6 @@ function* apiFetch(url, method = 'GET') {
     Accept: '*/*',
     'X-Auth-Token': API_TOKEN,
     'Content-Type': 'application/json',
-    /* 'Access-Control-Allow-Methods': 'GET',
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Headers': 'x-auth-token, x-response-control',
-    'Content-Length': 0, */
   };
   const params = { headers, method };
   const response = yield call(fetch, url, params);
@@ -27,7 +25,7 @@ export function* apiGet(url) {
 }
 
 export function* getListLeagues() {
-  const url = `https://cors-anywhere.herokuapp.com/https://api.football-data.org/v2/competitions/`;
+  const url = `${COMPETITIONS_URL}`;
   try {
     const response = yield call(apiGet, url);
     yield put({ type: GET_LIST_LEAGUES_SUCCESS, listLeagues: response });
@@ -41,9 +39,7 @@ export function* getListLeagues() {
 }
 
 export function* getListTeams(action) {
-  const url = `https://cors-anywhere.herokuapp.com/https://api.football-data.org/v2/competitions/${
-    action.id
-  }/teams`;
+  const url = `${COMPETITIONS_URL}${action.id}/teams`;
   try {
     const response = yield call(apiGet, url);
     yield put({ type: GET_TEAMS_LIST_SUCCESS, teamsList: response });
@@ -56,7 +52,25 @@ export function* getListTeams(action) {
   }
 }
 
+export function* getTeamMatches(action) {
+  console.log('action', action.params);
+  const url = `https://cors-anywhere.herokuapp.com/https://api.football-data.org/v2/teams/${
+    action.id
+  }/matches`;
+  try {
+    const response = yield call(apiGet, url);
+    yield put({ type: TEAM_MATCHES, teamMatches: response });
+  } catch (err) {
+    console.log(err);
+    /* yield put({
+      type: GET_WEATHER_FAILURE,
+      dataError: err,
+    }); */
+  }
+}
+
 export default function* homePageSaga() {
   yield takeLatest(GET_LIST_LEAGUES, getListLeagues);
   yield takeLatest(GET_TEAMS_LIST, getListTeams);
+  yield takeLatest(TEAM_MATCHES_WATCHER, getTeamMatches);
 }
