@@ -12,7 +12,7 @@ const useStyles = makeStyles(theme => ({
   },
   paper: {
     overflow: 'auto',
-    height: '90vh',
+    height: '700px',
     width: '40%',
   },
 }));

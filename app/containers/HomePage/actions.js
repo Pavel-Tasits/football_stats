@@ -1,5 +1,6 @@
 import {
   GET_LIST_LEAGUES,
+  GET_SELECTED_TEAM,
   GET_TEAMS_LIST,
   TEAM_ID,
   TEAM_MATCHES,
@@ -41,5 +42,12 @@ export function setTeamMatches(arr) {
   return {
     type: TEAM_MATCHES,
     teamMatches: arr,
+  };
+}
+
+export function getSelectedTeam(id) {
+  return {
+    type: GET_SELECTED_TEAM,
+    selectedTeam: id,
   };
 }

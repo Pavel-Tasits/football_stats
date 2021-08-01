@@ -6,6 +6,7 @@ import {
   GET_TEAMS_LIST_SUCCESS,
   TEAM_ID,
   TEAM_MATCHES,
+  GET_SELECTED_TEAM,
 } from './constants';
 
 // The initial state of the App
@@ -14,6 +15,7 @@ export const initialState = {
   teamsList: '',
   teamId: '',
   teamMatches: '',
+  selectedTeam: '',
   loading: false,
 };
 
@@ -40,6 +42,9 @@ const homeReducer = (state = initialState, action) =>
         break;
       case TEAM_MATCHES:
         draft.teamMatches = action.teamMatches;
+        break;
+      case GET_SELECTED_TEAM:
+        draft.selectedTeam = action.selectedTeam;
         break;
     }
   });

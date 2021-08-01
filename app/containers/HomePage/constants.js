@@ -18,3 +18,4 @@ export const GET_TEAMS_LIST_SUCCESS = 'boilerplate/Home/GET_TEAMS_LIST_SUCCESS';
 export const TEAM_ID = 'boilerplate/Home/TEAM_ID';
 export const TEAM_MATCHES = 'boilerplate/Home/TEAM_MATCHES';
 export const TEAM_MATCHES_WATCHER = 'boilerplate/Home/TEAM_MATCHES_WATCHER';
+export const GET_SELECTED_TEAM = 'boilerplate/Home/GET_SELECTED_TEAM';

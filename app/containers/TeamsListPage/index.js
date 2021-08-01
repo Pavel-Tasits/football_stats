@@ -4,7 +4,11 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import { makeStyles } from '@material-ui/core/styles';
-import { selectTeamsList } from '../HomePage/selectors';
+import {
+  selectTeamsList,
+  selectSelectedTeam,
+  selectTeamMatchesList,
+} from '../HomePage/selectors';
 import { setTeamMatchesWatcher, setTeamsList } from '../HomePage/actions';
 import TeamList from '../../components/TeamList/Loadable';
 import DatePicker from '../../components/DatePicker/Loadable';
@@ -12,6 +16,7 @@ import reducer from '../HomePage/reducer';
 import saga from '../HomePage/saga';
 import { useInjectReducer } from '../../utils/injectReducer';
 import { useInjectSaga } from '../../utils/injectSaga';
+import MatchesList from '../../components/MatchesList/Loadable';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -20,30 +25,42 @@ const useStyles = makeStyles(() => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
+  wrapper: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '60%',
+  },
 }));
 
 const key = 'home';
 
-export function TeamsListPage({ teamsList, handleGetTeamsList }) {
+export function TeamsListPage({
+  teamsList,
+  handleGetTeamsList,
+  getSelectedTeam,
+  teamMatches,
+}) {
   useInjectReducer({ key, reducer });
   useInjectSaga({ key, saga });
   const classes = useStyles();
 
   const perfEntries = performance.getEntriesByType('navigation');
-
   const url = new URL(window.location.href);
-  const team = url.searchParams.get('team');
+  const league = url.searchParams.get('league');
 
   useEffect(() => {
     if (perfEntries[0].type === 'reload') {
-      handleGetTeamsList(team);
+      handleGetTeamsList(league);
     }
   }, []);
 
   return (
     <div className={classes.root}>
       <TeamList teamsList={teamsList} />
-      <DatePicker team={team} />
+      <div className={classes.wrapper}>
+        {getSelectedTeam && <DatePicker league={league} />}
+        {teamMatches && <MatchesList />}
+      </div>
     </div>
   );
 }
@@ -51,10 +68,14 @@ export function TeamsListPage({ teamsList, handleGetTeamsList }) {
 TeamsListPage.propTypes = {
   teamsList: PropTypes.object.isRequired,
   handleGetTeamsList: PropTypes.func.isRequired,
+  getSelectedTeam: PropTypes.number.isRequired,
+  teamMatches: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
   teamsList: selectTeamsList(),
+  getSelectedTeam: selectSelectedTeam(),
+  teamMatches: selectTeamMatchesList(),
 });
 
 function mapDispatchToProps(dispatch) {

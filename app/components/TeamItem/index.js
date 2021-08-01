@@ -6,6 +6,13 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import reducer from '../../containers/HomePage/reducer';
+import saga from '../../containers/HomePage/saga';
+import { useInjectReducer } from '../../utils/injectReducer';
+import { useInjectSaga } from '../../utils/injectSaga';
+import { getSelectedTeam } from '../../containers/HomePage/actions';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -28,12 +35,24 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function TeamItem({ team }) {
+const key = 'home';
+
+function TeamItem({ team, selectTeam }) {
+  useInjectReducer({ key, reducer });
+  useInjectSaga({ key, saga });
   const classes = useStyles();
+
+  const handleSelectTeam = id => {
+    selectTeam(id);
+  };
 
   return (
     <div className={classes.root}>
-      <ListItem alignItems="center" className={classes.listItem}>
+      <ListItem
+        alignItems="center"
+        className={classes.listItem}
+        onClick={() => handleSelectTeam(team.id)}
+      >
         <ListItemAvatar>
           <Avatar alt="Remy Sharp" src={team.crestUrl} />
         </ListItemAvatar>
@@ -59,6 +78,21 @@ function TeamItem({ team }) {
 
 TeamItem.propTypes = {
   team: PropTypes.object.isRequired,
+  selectTeam: PropTypes.func.isRequired,
 };
 
-export default memo(TeamItem);
+function mapDispatchToProps(dispatch) {
+  return {
+    selectTeam: id => dispatch(getSelectedTeam(id)),
+  };
+}
+
+const withConnect = connect(
+  null,
+  mapDispatchToProps,
+);
+
+export default compose(
+  withConnect,
+  memo,
+)(TeamItem);

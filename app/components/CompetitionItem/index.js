@@ -44,7 +44,7 @@ function CompetitionItem({
   const handlePickCompetition = id => {
     handleSetTeamId(id);
     handleGetTeamsList(id);
-    history.push(`/teams_list?team=${id}`);
+    history.push(`/teams_list?league=${id}`);
   };
 
   return (

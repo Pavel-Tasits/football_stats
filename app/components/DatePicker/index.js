@@ -11,16 +11,20 @@ import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
+import { createStructuredSelector } from 'reselect';
+import { format } from 'date-fns';
 import reducer from '../../containers/HomePage/reducer';
 import saga from '../../containers/HomePage/saga';
 import { useInjectReducer } from '../../utils/injectReducer';
 import { useInjectSaga } from '../../utils/injectSaga';
 import { setTeamMatchesWatcher } from '../../containers/HomePage/actions';
+import { selectSelectedTeam } from '../../containers/HomePage/selectors';
+
 const useStyles = makeStyles(() => ({
   paper: {
     overflow: 'auto',
-    height: '15vh',
-    width: '60%',
+    height: 140,
+    width: '100%',
   },
   button: {
     display: 'block',
@@ -30,12 +34,12 @@ const useStyles = makeStyles(() => ({
 
 const key = 'home';
 
-function DatePicker({ setTeamMatches, team }) {
+function DatePicker({ setTeamMatches, getSelectedTeam }) {
   useInjectReducer({ key, reducer });
   useInjectSaga({ key, saga });
   const classes = useStyles();
-  const [dateFrom, setDateFrom] = useState(new Date('2014-08-18T21:11:54'));
-  const [dateTo, setDateTo] = useState(new Date('2014-08-18T21:11:54'));
+  const [dateFrom, setDateFrom] = useState(new Date('2020-01-01'));
+  const [dateTo, setDateTo] = useState(new Date('2021-01-01'));
 
   const handleDateFromChange = date => {
     setDateFrom(date);
@@ -46,8 +50,11 @@ function DatePicker({ setTeamMatches, team }) {
   };
 
   const handleGetTeamMatches = () => {
-    setTeamMatches([team, 'dfgsdfg', 'dsfgdf']);
-    console.log('team!!!', team);
+    setTeamMatches([
+      `${getSelectedTeam}`,
+      `${format(dateFrom, 'yyyy-MM-dd')}`,
+      `${format(dateTo, 'yyyy-MM-dd')}`,
+    ]);
   };
 
   return (
@@ -59,7 +66,7 @@ function DatePicker({ setTeamMatches, team }) {
             variant="inline"
             format="MM/dd/yyyy"
             margin="normal"
-            id="date-picker-inline"
+            id="dateFrom-picker-inline"
             label="Date picker inline"
             value={dateFrom}
             onChange={handleDateFromChange}
@@ -72,7 +79,7 @@ function DatePicker({ setTeamMatches, team }) {
             variant="inline"
             format="MM/dd/yyyy"
             margin="normal"
-            id="date-picker-inline"
+            id="dateTo-picker-inline"
             label="Date picker inline"
             value={dateTo}
             onChange={handleDateToChange}
@@ -96,8 +103,12 @@ function DatePicker({ setTeamMatches, team }) {
 
 DatePicker.propTypes = {
   setTeamMatches: PropTypes.func.isRequired,
-  team: PropTypes.string.isRequired,
+  getSelectedTeam: PropTypes.number.isRequired,
 };
+
+const mapStateToProps = createStructuredSelector({
+  getSelectedTeam: selectSelectedTeam(),
+});
 
 function mapDispatchToProps(dispatch) {
   return {
@@ -106,7 +117,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 const withConnect = connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps,
 );
 

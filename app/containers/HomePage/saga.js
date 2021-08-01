@@ -1,5 +1,5 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
-import { API_TOKEN, COMPETITIONS_URL } from '../../utils/constants';
+import { API_TOKEN, BASE_URL } from '../../utils/constants';
 import {
   GET_LIST_LEAGUES,
   GET_LIST_LEAGUES_SUCCESS,
@@ -25,7 +25,7 @@ export function* apiGet(url) {
 }
 
 export function* getListLeagues() {
-  const url = `${COMPETITIONS_URL}`;
+  const url = `${BASE_URL}competitions`;
   try {
     const response = yield call(apiGet, url);
     yield put({ type: GET_LIST_LEAGUES_SUCCESS, listLeagues: response });
@@ -39,7 +39,7 @@ export function* getListLeagues() {
 }
 
 export function* getListTeams(action) {
-  const url = `${COMPETITIONS_URL}${action.id}/teams`;
+  const url = `${BASE_URL}competitions/${action.id}/teams`;
   try {
     const response = yield call(apiGet, url);
     yield put({ type: GET_TEAMS_LIST_SUCCESS, teamsList: response });
@@ -53,10 +53,8 @@ export function* getListTeams(action) {
 }
 
 export function* getTeamMatches(action) {
-  console.log('action', action.params);
-  const url = `https://cors-anywhere.herokuapp.com/https://api.football-data.org/v2/teams/${
-    action.id
-  }/matches`;
+  const { teamId, dateFrom, dateTo } = action.params;
+  const url = `${BASE_URL}teams/${teamId}/matches?dateFrom=${dateFrom}&dateTo=${dateTo}`;
   try {
     const response = yield call(apiGet, url);
     yield put({ type: TEAM_MATCHES, teamMatches: response });
