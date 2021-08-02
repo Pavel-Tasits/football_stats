@@ -23,7 +23,11 @@ const useStyles = makeStyles(theme => ({
     alignItems: 'center',
   },
   listItem: {
-    width: '80%',
+    width: '100%',
+    '&:hover': {
+      border: '1px solid #FFEF05',
+      backgroundColor: 'rgba(255, 239, 5, .1)',
+    },
   },
   inline: {
     display: 'inline',

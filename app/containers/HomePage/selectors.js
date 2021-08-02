@@ -19,6 +19,12 @@ const selectTeamsList = () =>
     homeState => homeState.teamsList,
   );
 
+const selectLeagueId = () =>
+  createSelector(
+    selectHome,
+    homeState => homeState.teamId,
+  );
+
 const selectSelectedTeam = () =>
   createSelector(
     selectHome,
@@ -37,4 +43,5 @@ export {
   selectTeamsList,
   selectSelectedTeam,
   selectTeamMatchesList,
+  selectLeagueId,
 };

@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
-// import PropTypes from 'prop-types';
+import React, { memo } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import InputBase from '@material-ui/core/InputBase';
 import { alpha, makeStyles } from '@material-ui/core/styles';
-import MenuIcon from '@material-ui/icons/Menu';
-import SearchIcon from '@material-ui/icons/Search';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { createStructuredSelector } from 'reselect';
+import { useInjectReducer } from '../../utils/injectReducer';
+import { useInjectSaga } from '../../utils/injectSaga';
+import reducer from '../../containers/HomePage/reducer';
+import saga from '../../containers/HomePage/saga';
+import { selectLeagueId } from '../../containers/HomePage/selectors';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -66,66 +68,40 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function MenuComponent() {
+const key = 'home';
+
+function MenuComponent({ teamId }) {
   const classes = useStyles();
-  const [anchorEl, setAnchorEl] = useState(null);
-
-  const handleClick = event => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  useInjectReducer({ key, reducer });
+  useInjectSaga({ key, saga });
 
   return (
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
-          <IconButton
-            edge="start"
-            className={classes.menuButton}
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleClick}
-            aria-controls="simple-menu"
-          >
-            <MenuIcon />
-          </IconButton>
-          <Menu
-            id="simple-menu"
-            anchorEl={anchorEl}
-            keepMounted
-            open={Boolean(anchorEl)}
-            onClose={handleClose}
-          >
-            <MenuItem onClick={handleClose}>Список лиг</MenuItem>
-            <MenuItem onClick={handleClose}>Список команд</MenuItem>
-            <MenuItem onClick={handleClose}>Календарь лиги</MenuItem>
-            <MenuItem onClick={handleClose}>Список матчей команды</MenuItem>
-          </Menu>
           <Typography className={classes.title} variant="h6" noWrap>
-            Список лиг
+            {teamId ? 'Список команд' : 'Список лиг'}
           </Typography>
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
-            </div>
-            <InputBase
-              placeholder="Search…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </div>
         </Toolbar>
       </AppBar>
     </div>
   );
 }
 
-Menu.propTypes = {};
+MenuComponent.propTypes = {
+  teamId: PropTypes.number.isRequired,
+};
 
-export default MenuComponent;
+const mapStateToProps = createStructuredSelector({
+  teamId: selectLeagueId(),
+});
+
+const withConnect = connect(
+  mapStateToProps,
+  null,
+);
+
+export default compose(
+  withConnect,
+  memo,
+)(MenuComponent);
